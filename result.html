@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <style>
+        .form-control {
+            box-shadow: none !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 0.25rem !important;
+        }
+
+        .form-select {
+            box-shadow: none !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 0.25rem !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-flex flex-column min-vh-100">
+
+        <nav class="navbar navbar-expand-lg bg-primary border-primary border-bottom">
+            <div class="container-fluid my-1 mx-5">
+                <a class="navbar-brand text-white fw-bold fs-5" href="#">
+                    <i class="fa-solid fa-earth-americas"></i> TRAVEL RECOMMENDATION</a>
+                <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars text-white"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" href="/predict">Prediction</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" aria-current="page" href="/upload">Upload</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" href="/forecast">Forecast</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" href="https://www.google.com/maps">Google Maps</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+
+        <div class="container bg-white my-4">
+
+            <div class="d-flex mt-5 mb-3">
+                <h3 class="text-primary-emphasis link-offset-1 text-decoration-underline flex-grow-1 flex-md-grow-0">
+                    Result
+                </h3>
+            </div>
+
+            <div class="row justify-content-center mb-3 mt-4 gx-5 gy-4">
+
+                {% for data in result %}
+
+                <div class="col-md-6">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body">
+                            <div class="row gy-4">
+                                <div class="col-md-12">
+                                    <h4 class="mb-3 mt-1 fw-normal text-capitalize"><i
+                                            class="fa-solid fa-location-dot"></i> {{ data[3] }}</h4>
+                                    <span class="name visually-hidden">{{ data[2] }}</span>
+                                    <h4 class="mb-3">
+                                        <div class="rateYo" data-rating="{{ data[4] }}"></div>
+                                    </h4>
+                                    <h5 class="my-3"><span class="fw-normal">
+                                            <i class="fa-solid fa-compass"></i>
+                                        </span> {{ data[2] }}, {{ data[5] }} Kms
+                                    </h5>
+                                    <h5 class="my-3"><span class="fw-normal"> 
+                                        </span> {{ data[6] }}
+                                    </h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+
+    <script>
+        $(function () {
+
+            $('.toast').toast('show');
+
+            $("#usertable").DataTable({
+                lengthMenu: [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, 'All'],
+                ],
+            });
+
+            $(".rateYo").each(function () {
+                // debugger
+
+                console.log($(this).data("rating"));
+
+                var ratingh = Number(parseFloat($(this).data("rating"))).toFixed(1)
+
+                if (ratingh == null || ratingh == '' || isNaN(ratingh)) {
+                    ratingh = 0
+                }
+
+                console.log(ratingh);
+
+                $(this).rateYo({
+                    rating: ratingh,
+                    readOnly: true,
+                    starWidth: "20px",
+                    spacing: "5px",
+                    precision: 0.1,
+                    minValue: 0,
+                    maxValue: 5,
+                    numStars: 5,
+                });
+            });
+
+        })
+    </script>
+
+</body>
+
+
+</html>
